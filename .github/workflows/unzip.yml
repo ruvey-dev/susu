@@ -1,0 +1,28 @@
+name: Auto Unzip
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Unzip all zip files
+        run: |
+          for file in *.zip; do
+            unzip -o "$file"
+          done
+
+      - name: Commit hasil unzip
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto unzip files" || echo "No changes"
+          git push
